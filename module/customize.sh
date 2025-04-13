@@ -2,7 +2,8 @@ ui_print ""
 ui_print "=== BEESRV ==="
 ui_print "Version: $(grep_prop version $MODPATH/module.prop)"
 ui_print "Made with ❤️ by ihatenodejs"
-ui_print "================================"
+ui_print "==========================="
+ui_print ""
 sleep 0.4
 
 # Environment checks
@@ -31,14 +32,33 @@ fi
 # Create config
 ui_print "[i] Creating config..."
 mkdir -p /data/adb/beesrv
-touch /data/adb/beesrv/config.txt
-chmod 664 /data/adb/beesrv/config.txt
 
-echo "SERVER=" >> /data/adb/beesrv/config.txt
+# Check if config file exists, and check if required variables are set
+config_modified=false
+if [ ! -f "/data/adb/beesrv/config.txt" ]; then
+  echo "SERVER=" >> /data/adb/beesrv/config.txt
+  ui_print "[✔] Config created"
+  ui_print ""
+else
+  ui_print "[i] Config file found, checking..."
 
-ui_print "[✔] Config created"
+  # Check SERVER var
+  if ! grep -q "SERVER=" /data/adb/beesrv/config.txt; then
+    ui_print "[i] SERVER variable not found, adding..."
+    echo "SERVER=" >> /data/adb/beesrv/config.txt
+    config_modified=true
+  fi
 
-ui_print ""
+  if [ "$config_modified" = true ]; then
+    ui_print "[✔] Config modified successfully"
+    ui_print ""
+  else
+    ui_print "[✔] Config already valid, skipping update..."
+    ui_print ""
+  fi
+fi
+
 ui_print "== INSTALLATION COMPLETE! =="
+ui_print ""
 ui_print "Join our Telegram channel: t.me/pontushub"
 sleep 0.4

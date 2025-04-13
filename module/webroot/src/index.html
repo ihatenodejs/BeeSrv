@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeeSrv WebUI</title>
+
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <script type="module" src="js/app.js"></script>
+  </head>
+  <body class="bg-gray-900 text-white">
+    <header class="bg-gray-800 p-4">
+      <h1 class="text-2xl font-bold">BeeSrv WebUI</h1>
+    </header>
+
+    <main class="p-4">
+      <h2 class="text-2xl font-bold mb-4">Self-Check</h2>
+      <table class="w-full bg-gray-700 border-collapse border border-gray-600 mb-4">
+        <tbody>
+          <tr>
+            <th class="border border-gray-600 p-2 text-left">Internet Connection</th>
+            <td class="border border-gray-600 p-2">
+              <button class="bg-slate-500 text-white px-3 py-1 rounded-md hover:bg-slate-600 transition-colors" id="checkConnection">
+                <span id="testBtn" class="flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-router-icon lucide-router w-4 h-4"><rect width="20" height="8" x="2" y="14" rx="2"/><path d="M6.01 18H6"/><path d="M10.01 18H10"/><path d="M15 10v4"/><path d="M17.84 7.17a4 4 0 0 0-5.66 0"/><path d="M20.66 4.34a8 8 0 0 0-11.31 0"/></svg>
+                  Test
+                </span>
+                <span id="testBtnLoading" class="flex items-center gap-2 hidden">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-icon lucide-loader w-4 h-4 animate-spin"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg>
+                  Testing...
+                </span>
+              </button>
+              <span id="connectionStatus" class="ml-2 text-green-400 flex items-center gap-2 hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-icon lucide-check w-5 h-5"><path d="M20 6 9 17l-5-5"/></svg>
+                Connected
+              </span>
+              <span id="connectionError" class="ml-2 text-red-400 flex items-center gap-2 hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x w-5 h-5"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>
+                Error
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div id="errorBox" class="bg-gray-700 border border-gray-600 p-4 rounded-md mb-4 hidden">
+        <div class="flex items-center gap-2 text-red-400 mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-triangle w-5 h-5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+          <span class="font-semibold">Error</span>
+        </div>
+        <p id="errorMessage" class="text-gray-300">No error</p>
+      </div>
+
+      <h2 class="text-2xl font-bold mb-4">Module</h2>
+      <table class="w-full bg-gray-700 border-collapse border border-gray-600">
+        <tbody>
+          <tr>
+            <th class="border border-gray-600 p-2 text-left">Version</th>
+            <td class="border border-gray-600 p-2">
+              <span id="version" class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-icon lucide-loader w-5 h-5 animate-spin" id="versionLoader"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg>
+                <span id="versionText">Loading...</span>
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <th class="border border-gray-600 p-2 text-left">Server</th>
+            <td class="border border-gray-600 p-2">
+              <span id="server" class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-icon lucide-loader w-5 h-5 animate-spin" id="serverLoader"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg>
+                <span id="serverText">Loading...</span>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 class="text-2xl font-bold mt-4">Join Us</h2>
+      <div class="flex flex-wrap gap-2 mt-4">
+        <a href="https://t.me/pontushub">
+          <button class="flex items-center bg-slate-600 text-white px-4 py-2 rounded-md hover:bg-slate-700 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send-icon lucide-send mr-1 w-5 h-5"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>
+            Telegram
+          </button>
+        </a>
+        <a href="https://t.me/pontushubchat">
+          <button class="flex items-center bg-slate-600 text-white px-4 py-2 rounded-md hover:bg-slate-700 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle-question-icon lucide-message-circle-question mr-1 w-5 h-5"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+            Support
+          </button>
+        </a>
+        <a href="https://donate.stripe.com/cN28yxe1wf5teC4dQS">
+          <button class="flex items-center bg-slate-600 text-white px-4 py-2 rounded-md hover:bg-slate-700 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hand-coins-icon lucide-hand-coins mr-1 w-5 h-5"><path d="M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17"/><path d="m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9"/><path d="m2 16 6 6"/><circle cx="16" cy="9" r="2.9"/><circle cx="6" cy="5" r="3"/></svg>
+            Donate
+          </button>
+        </a>
+      </div>
+      <p class="mt-4 text-center">Made with ❤️ by ihatenodejs</p>
+    </main>
+  </body>
+</html>
