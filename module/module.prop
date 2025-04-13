@@ -1,0 +1,9 @@
+id=BeeSrv
+name=BeeSrv
+version=v1.0.0
+versionCode=1000
+author=ihatenodejs
+description=Keep your beebox up-to-date
+updateJson=https://raw.githubusercontent.com/ihatenodejs/BeeSrv/main/update.json
+support=https://t.me/pontushubchat
+donate=https://donate.stripe.com/cN28yxe1wf5teC4dQS
