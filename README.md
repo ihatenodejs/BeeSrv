@@ -1,5 +1,7 @@
 # BeeSrv
 
+[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
+
 A KernelSU module which simplifies the installation of a keybox.xml file by fetching it from a server.
 
 > [!IMPORTANT]
