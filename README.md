@@ -1,8 +1,21 @@
 # BeeSrv
 
+A KernelSU module which simplifies the installation of a keybox.xml file by fetching it from a server.
+
+> [!IMPORTANT]
+> **This project is not hosted on GitHub. If you are looking to contribute or open an issue, please see my repo on [LibreCloud Git](https://git.pontusmail.org/aidan/beesrv).**
+
+## Module
+
+This client module has been primarially written for KernelSU. I test the module with the latest version of KernelSU-Next. Community testing and support for other root providers is encouraged!
+
 ## Server
 
+To create a server which is capable of serving the files to a client (user of the module), this will require a server. You can set one up below with minimal effort.
+
 ### Installing Dependencies
+
+This project prioritizes support for [Bun](https://bun.sh) over NPM. These instructions are written for bun, although they could be adapted.
 
 ```bash
 bun install
