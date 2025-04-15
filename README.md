@@ -11,6 +11,14 @@ A KernelSU module which simplifies the installation of a keybox.xml file by fetc
 
 This client module has been primarially written for KernelSU. I test the module with the latest version of KernelSU-Next. Community testing and support for other root providers is encouraged!
 
+### Testing WebUI Locally
+
+```bash
+cd module/webroot # Make sure you are in webroot
+bun install # Or NPM
+bun start # Start the server
+```
+
 ## Server
 
 To create a server which is capable of serving the files to a client (user of the module), this will require a server. You can set one up below with minimal effort.
@@ -23,7 +31,7 @@ This project prioritizes support for [Bun](https://bun.sh) over NPM. These instr
 bun install
 ```
 
-To run:
+### Running the Server
 
 ```bash
 bun run index.ts
@@ -31,7 +39,7 @@ bun run index.ts
 
 ### Applying DB Changes
 
-```
+```bash
 bunx drizzle-kit push
 ```
 
