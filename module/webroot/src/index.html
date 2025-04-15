@@ -66,12 +66,64 @@
             </td>
           </tr>
           <tr>
+            <th class="border border-gray-600 p-2 text-left">Debug Mode</th>
+            <td class="border border-gray-600 p-2">
+              <span id="debug" class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-icon lucide-loader w-5 h-5 animate-spin" id="debugLoader"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg>
+                <span id="debugText">Loading...</span>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 class="text-2xl font-bold my-4">Configuration</h2>
+      <table class="w-full bg-gray-700 border-collapse border border-gray-600">
+        <tbody>
+          <tr>
             <th class="border border-gray-600 p-2 text-left">Server</th>
             <td class="border border-gray-600 p-2">
-              <span id="server" class="flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-icon lucide-loader w-5 h-5 animate-spin" id="serverLoader"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg>
-                <span id="serverText">Loading...</span>
-              </span>
+              <div class="flex items-center justify-between">
+                <span id="server" class="flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-icon lucide-loader w-5 h-5 animate-spin" id="serverLoader"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg>
+                  <span id="serverText">Loading...</span>
+                </span>
+                <div class="flex items-center gap-2">
+                  <input type="text" id="serverInput" class="hidden bg-gray-700 border border-gray-600 rounded-md p-1 text-white w-64" placeholder="Enter server URL">
+                  <button id="editServerBtn" class="bg-slate-500 text-white px-3 py-1 rounded-md hover:bg-slate-600 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil w-4 h-4"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                  </button>
+                  <button id="saveServerBtn" class="hidden bg-slate-500 text-white px-3 py-1 rounded-md hover:bg-slate-600 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check w-4 h-4"><path d="M20 6 9 17l-5-5"/></svg>
+                  </button>
+                  <button id="cancelServerBtn" class="hidden bg-gray-600 text-white px-3 py-1 rounded-md hover:bg-gray-700 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x w-4 h-4"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th class="border border-gray-600 p-2 text-left">Email</th>
+            <td class="border border-gray-600 p-2">
+              <div class="flex items-center justify-between">
+                <span id="email" class="flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-icon lucide-loader w-5 h-5 animate-spin" id="emailLoader"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg>
+                  <span id="emailText">Loading...</span>
+                </span>
+                <div class="flex items-center gap-2">
+                  <input type="email" id="emailInput" class="hidden bg-gray-700 border border-gray-600 rounded-md p-1 text-white w-64" placeholder="Enter your email">
+                  <button id="editEmailBtn" class="bg-slate-500 text-white px-3 py-1 rounded-md hover:bg-slate-600 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil w-4 h-4"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                  </button>
+                  <button id="saveEmailBtn" class="hidden bg-slate-500 text-white px-3 py-1 rounded-md hover:bg-slate-600 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check w-4 h-4"><path d="M20 6 9 17l-5-5"/></svg>
+                  </button>
+                  <button id="cancelEmailBtn" class="hidden bg-gray-600 text-white px-3 py-1 rounded-md hover:bg-gray-700 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x w-4 h-4"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>
+                  </button>
+                </div>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -100,5 +152,17 @@
       </div>
       <p class="mt-4 text-center">Made with ❤️ by ihatenodejs</p>
     </main>
+
+    <!-- Email Edit Modal -->
+    <div id="emailModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+      <div class="bg-gray-800 p-6 rounded-lg w-96">
+        <h3 class="text-xl font-bold mb-4">Edit Email</h3>
+        <input type="email" id="emailInput" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 mb-4 text-white" placeholder="Enter your email">
+        <div class="flex justify-end gap-2">
+          <button id="cancelEmailBtn" class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition-colors">Cancel</button>
+          <button id="saveEmailBtn" class="bg-slate-500 text-white px-4 py-2 rounded-md hover:bg-slate-600 transition-colors">Save</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

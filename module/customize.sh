@@ -1,6 +1,6 @@
 ui_print ""
 ui_print "=== BEESRV ==="
-ui_print "Version: $(grep_prop version $MODPATH/module.prop)"
+ui_print "Version: $(grep_prop version $MODPATH/module.prop) ($(grep_prop versionCode $MODPATH/module.prop))"
 ui_print "Made with ❤️ by ihatenodejs"
 ui_print "==========================="
 ui_print ""
@@ -37,6 +37,8 @@ mkdir -p /data/adb/beesrv
 config_modified=false
 if [ ! -f "/data/adb/beesrv/config.txt" ]; then
   echo "SERVER=" >> /data/adb/beesrv/config.txt
+  echo "EMAIL=" >> /data/adb/beesrv/config.txt
+  echo "DEBUG=false" >> /data/adb/beesrv/config.txt
   ui_print "[✔] Config created"
   ui_print ""
 else
@@ -49,6 +51,20 @@ else
     config_modified=true
   fi
 
+  # Check EMAIL var
+  if ! grep -q "EMAIL=" /data/adb/beesrv/config.txt; then
+    ui_print "[i] EMAIL variable not found, adding..."
+    echo "EMAIL=" >> /data/adb/beesrv/config.txt
+    config_modified=true
+  fi
+
+  # Check DEBUG var
+  if ! grep -q "DEBUG=" /data/adb/beesrv/config.txt; then
+    ui_print "[i] DEBUG variable not found, adding..."
+    echo "DEBUG=false" >> /data/adb/beesrv/config.txt
+    config_modified=true
+  fi
+
   if [ "$config_modified" = true ]; then
     ui_print "[✔] Config modified successfully"
     ui_print ""
@@ -57,6 +73,13 @@ else
     ui_print ""
   fi
 fi
+
+# Set permissions for scripts
+ui_print "[i] Setting permissions for scripts..."
+chmod 755 $MODPATH/util/*
+sleep 0.5
+ui_print "[✔] Permissions set"
+ui_print ""
 
 ui_print "== INSTALLATION COMPLETE! =="
 ui_print ""

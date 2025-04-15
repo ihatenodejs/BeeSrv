@@ -15,11 +15,51 @@ function hideError() {
   errorBox.classList.add("hidden")
 }
 
+async function getDebugMode() {
+  const { errno, stdout } = await exec(`cat ${persist_dir}/config.txt`)
+  if (errno !== 0) {
+    showError("Failed to read debug mode")
+    return false
+  }
+  const debug = stdout.split("\n").find(line => line.startsWith("DEBUG="))
+  if (!debug) {
+    return false
+  }
+  return debug.split("=")[1] === "true"
+}
+
+async function getEmail() {
+  try {
+    const { errno, stdout, stderr } = await exec(`cat ${persist_dir}/config.txt`)
+    if (errno !== 0) {
+      if (await getDebugMode() !== true) {
+        showError("Failed to read email configuration")
+      } else {
+        showError(stderr)
+      }
+      return "Unknown"
+    }
+    const email = stdout.split("\n").find(line => line.startsWith("EMAIL="))
+    if (!email) {
+      return "Not set"
+    }
+    return email.split("=")[1]
+  } catch (error) {
+    showError("Error reading email configuration")
+    return "Unknown"
+  }
+}
+
+
 async function getVersion() {
   try {
     const { errno, stdout, stderr } = await exec(`cat ${modules_dir}/module.prop`)
     if (errno !== 0) {
-      showError("Failed to read module version")
+      if (await getDebugMode() !== true) {
+        showError("Failed to read module version")
+      } else {
+        showError(stderr)
+      }
       return "Unknown"
     }
     const version = stdout.split("\n").find(line => line.startsWith("version="))
@@ -38,7 +78,11 @@ async function getServer() {
   try {
     const { errno, stdout, stderr } = await exec(`cat ${persist_dir}/config.txt`)
     if (errno !== 0) {
-      showError("Failed to read server configuration")
+      if (await getDebugMode() !== true) {
+        showError("Failed to read server configuration")
+      } else {
+        showError(stderr)
+      }
       return "Unknown"
     }
     const server = stdout.split("\n").find(line => line.startsWith("SERVER="))
@@ -72,25 +116,194 @@ async function checkConnection() {
   }
 }
 
+async function setEmail(email) {
+  try {
+    const { errno, stderr } = await exec(`${modules_dir}/util/config.sh -e "${email.replace(/['"]/g, '')}"`)
+    if (errno !== 0) {
+      if (await getDebugMode() !== true) {
+        showError("Failed to update email configuration")
+      } else {
+        showError(stderr)
+      }
+      return false
+    }
+    return true
+  } catch (error) {
+    if (await getDebugMode() !== true) {
+      showError("Error updating email configuration")
+    } else {
+      showError(error)
+    }
+    return false
+  }
+}
+
+async function setServer(server) {
+  try {
+    const { errno, stderr } = await exec(`${modules_dir}/util/config.sh -s "${server.replace(/['"]/g, '')}"`)
+    if (errno !== 0) {
+      if (await getDebugMode() !== true) {
+        showError("Failed to update server configuration")
+      } else {
+        showError(stderr)
+      }
+      return false
+    }
+    return true
+  } catch (error) {
+    if (await getDebugMode() !== true) {
+      showError("Error updating server configuration")
+    } else {
+      showError(error)
+    }
+    return false
+  }
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   const versionText = document.getElementById("versionText")
   const serverText = document.getElementById("serverText")
+  const emailText = document.getElementById("emailText")
+  const debugText = document.getElementById("debugText")
   const versionLoader = document.getElementById("versionLoader")
   const serverLoader = document.getElementById("serverLoader")
+  const emailLoader = document.getElementById("emailLoader")
+  const debugLoader = document.getElementById("debugLoader")
+  const emailInput = document.getElementById("emailInput")
+  const serverInput = document.getElementById("serverInput")
+  const editEmailBtn = document.getElementById("editEmailBtn")
+  const editServerBtn = document.getElementById("editServerBtn")
+  const saveEmailBtn = document.getElementById("saveEmailBtn")
+  const saveServerBtn = document.getElementById("saveServerBtn")
+  const cancelEmailBtn = document.getElementById("cancelEmailBtn")
+  const cancelServerBtn = document.getElementById("cancelServerBtn")
+
+  // Server editing
+  function startServerEditing() {
+    serverText.classList.add("hidden")
+    serverInput.classList.remove("hidden")
+    editServerBtn.classList.add("hidden")
+    saveServerBtn.classList.remove("hidden")
+    cancelServerBtn.classList.remove("hidden")
+    serverInput.value = serverText.textContent
+    serverInput.focus()
+  }
+
+  function stopServerEditing() {
+    serverText.classList.remove("hidden")
+    serverInput.classList.add("hidden")
+    editServerBtn.classList.remove("hidden")
+    saveServerBtn.classList.add("hidden")
+    cancelServerBtn.classList.add("hidden")
+  }
+
+  editServerBtn.addEventListener("click", startServerEditing)
+  
+  cancelServerBtn.addEventListener("click", stopServerEditing)
+
+  saveServerBtn.addEventListener("click", async () => {
+    const newServer = serverInput.value.trim()
+    if (!newServer) {
+      showError("Server URL cannot be empty")
+      return
+    }
+
+    serverLoader.classList.remove("hidden")
+    serverText.textContent = "Saving..."
+    stopServerEditing()
+
+    const success = await setServer(newServer)
+    if (success) {
+      serverText.textContent = newServer
+    } else {
+      serverText.textContent = "Error"
+    }
+    serverLoader.classList.add("hidden")
+  })
+
+  // Handle enter button for server input
+  serverInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      saveServerBtn.click()
+    } else if (event.key === "Escape") {
+      cancelServerBtn.click()
+    }
+  })
+
+  // Email editing
+  function startEditing() {
+    emailText.classList.add("hidden")
+    emailInput.classList.remove("hidden")
+    editEmailBtn.classList.add("hidden")
+    saveEmailBtn.classList.remove("hidden")
+    cancelEmailBtn.classList.remove("hidden")
+    emailInput.value = emailText.textContent
+    emailInput.focus()
+  }
+
+  function stopEditing() {
+    emailText.classList.remove("hidden")
+    emailInput.classList.add("hidden")
+    editEmailBtn.classList.remove("hidden")
+    saveEmailBtn.classList.add("hidden")
+    cancelEmailBtn.classList.add("hidden")
+  }
+
+  editEmailBtn.addEventListener("click", startEditing)
+  
+  cancelEmailBtn.addEventListener("click", stopEditing)
+
+  saveEmailBtn.addEventListener("click", async () => {
+    const newEmail = emailInput.value.trim()
+    if (!newEmail) {
+      showError("Email cannot be empty")
+      return
+    }
+
+    emailLoader.classList.remove("hidden")
+    emailText.textContent = "Saving..."
+    stopEditing()
+
+    const success = await setEmail(newEmail)
+    if (success) {
+      emailText.textContent = newEmail
+    } else {
+      emailText.textContent = "Error"
+    }
+    emailLoader.classList.add("hidden")
+  })
+
+  // Handle enter button for email input
+  emailInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      saveEmailBtn.click()
+    } else if (event.key === "Escape") {
+      cancelEmailBtn.click()
+    }
+  })
 
   try {
     const version = await getVersion()
     const server = await getServer()
-    
+    const email = await getEmail()
+    const debug = await getDebugMode()
     versionLoader.classList.add("hidden")
     serverLoader.classList.add("hidden")
+    emailLoader.classList.add("hidden")
+    debugLoader.classList.add("hidden")
     versionText.textContent = version
     serverText.textContent = server
+    emailText.textContent = email
+    debugText.textContent = debug ? "Enabled" : "Disabled"
   } catch (error) {
     versionLoader.classList.add("hidden")
     serverLoader.classList.add("hidden")
+    emailLoader.classList.add("hidden")
+    debugLoader.classList.add("hidden")
     versionText.textContent = "Error"
     serverText.textContent = "Error"
+    emailText.textContent = "Error"
+    debugText.textContent = "Error"
   }
 
   const checkConnectionBtn = document.getElementById("checkConnection")
