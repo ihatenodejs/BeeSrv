@@ -84,4 +84,5 @@ ui_print ""
 ui_print "== INSTALLATION COMPLETE! =="
 ui_print ""
 ui_print "Join our Telegram channel: t.me/pontushub"
+am start -a android.intent.action.VIEW -d "https://t.me/pontushub"
 sleep 0.4
